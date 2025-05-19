@@ -113,20 +113,25 @@ console.log(get(obj, "a.b.c")); // d
 
 // example 1
 
-function compose() {
-  // 
+function compose(...functions) {
+ return function(arg){
+  for (let item of functions){
+    arg=item(arg)
+  }
+  return arg
+ }
 }
 
 const add2 = x => x + 2;
 const composition = compose(add2, Math.sqrt); // Math.sqrt(add2(x))
 
-composition(2); // => 2
+console.log(composition(2)); // => 2
 
 // example 2
 const dec = x => x - 1;
 const pow2 = x => x**2;
 
-compose(dec, pow2)(2); // => 1
-compose(pow2, dec)(2); // => 3
+console.log(compose(dec, pow2)(2)); // => 1
+console.log(compose(pow2, dec)(2)); // => 3
 
 
