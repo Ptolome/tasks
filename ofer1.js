@@ -1,7 +1,88 @@
-// const proises=[new Promise().resolve(),new Promise(), new Promise()]
-// function MyPromiseAll(promises) {
-//      new Promise()
+// polifils promise.All
+// function PromiseAll(arrOfPromises) {
+//   return new Promise((resolve, rejefct) => {
+//     const resultArr = [];
+//     let counterOfresolve = arrOfPromises.length;
+//     if (!counterOfresolve) {
+//       resolve([])
+//     }
+//     arrOfPromises.forEach((element, index) => {
+//       Promise.resolve(element)
+//         .then((data) => {
+//           resultArr[index] = data;
+//           counterOfresolve -= 1;
+//           if (!counterOfresolve) {
+//             resolve( resultArr);
+//           }
+//         })
+//         .catch((err) => rejefct(err));
+//     });
+
+//   });
 // }
+
+async function PromiseAll(arrayOfPromises) {
+  const result = [];
+
+  for (let i = 0; i < arrayOfPromises.length; i++) {
+    console.log(i + 1);
+    try {
+      const item = await Promise.resolve(arrayOfPromises[i]);
+      result[i] = item;
+    } catch (e) {
+      throw e;
+    }
+  }
+  return result;
+}
+// async function promiseAllSettled(arrayOfPromise) {
+//   const result = [];
+//   for (let i = 0; i < arrayOfPromise.length; i++) {
+
+//       try {
+//          data = await Promise.resolve(arrayOfPromise[i]);
+//         result.push({ status: "fulfilled", value: data });
+//       } catch (e) {
+//         result.push({ status: "rejected", reason: e });
+//       }
+
+//   }
+//   return result
+// }
+
+const promiseAllSettled = function (arrayOfPromises) {
+  return new Promise((resolve, reject) => {
+    const result = [];
+    let count = 0;
+    for (let i of arrayOfPromises) {
+      Promise.resolve(i)
+        .then((data) => result.push({ status: "fulfilled", value: data }))
+        .catch((e) => result.push({ status: "rejected", reason: e }))
+        .finally(() => {
+          count += 1;
+          if (count === arrayOfPromises.length) {
+            resolve(result);
+          }
+        });
+    }
+  });
+};
+const promiseRace=(arrayOfPromises)=>{
+  return new Promise((resolve, reject)=>{
+    for (let item of arrayOfPromises){
+      Promise.resolve(item)
+      .then((data)=>resolve(data))
+      .catch((err)=>reject(err))
+      
+    }
+  })
+}
+promiseRace([
+  new Promise((resolve) => setTimeout(() => resolve(1), 10000)), // 1
+  new Promise((resolve) => setTimeout(() => resolve(2), 20000)), // 2
+  new Promise((resolve, reject) => setTimeout(() => reject(3), 3000)), // 3
+  new Promise((resolve) => setTimeout(() => resolve(4), 4000)), // 3
+]).then((data) => console.log(data));
 
 // task 1
 // const obj = {
@@ -87,51 +168,71 @@
 // Написать функцию get(obj, path), которая возвращает значение по указанному пути в объекте.
 //  Если путь не существует, функция должна возвращать undefined.
 
-function get(obj, path) {
-  const pathArray = path.split(".");
-  let pathNow = obj;
-  for (let key of pathArray) {
-    pathNow = pathNow[key];
-  }
-  return pathNow;
-}
-const obj = {
-  a: {
-    b: {
-      c: "d",
-    },
-  },
-};
+// function get(obj, path) {
+//   const pathArray = path.split(".");
+//   let pathNow = obj;
+//   for (let key of pathArray) {
+//     pathNow = pathNow[key];
+//   }
+//   return pathNow;
+// }
+// const obj = {
+//   a: {
+//     b: {
+//       c: "d",
+//     },
+//   },
+// };
 
-console.log(get(obj, "a.b.c")); // d
+// console.log(get(obj, "a.b.c")); // d
 
+// // task 6
+// // Написать функцию compose, реализующую композицию функций:
+// //  на вход подается неограниченное число функций, на выходе получаем функцию,
+// //  которая выполняет над аргументом изначально переданные функции в том же порядке.
 
-// task 6
-// Написать функцию compose, реализующую композицию функций:
-//  на вход подается неограниченное число функций, на выходе получаем функцию,
-//  которая выполняет над аргументом изначально переданные функции в том же порядке.
+// // example 1
 
-// example 1
+// function compose(...functions) {
+//  return function(arg){
+//   for (let item of functions){
+//     arg=item(arg)
+//   }
+//   return arg
+//  }
+// }
 
-function compose(...functions) {
- return function(arg){
-  for (let item of functions){
-    arg=item(arg)
-  }
-  return arg
- }
-}
+// const add2 = x => x + 2;
+// const composition = compose(add2, Math.sqrt); // Math.sqrt(add2(x))
 
-const add2 = x => x + 2;
-const composition = compose(add2, Math.sqrt); // Math.sqrt(add2(x))
+// console.log(composition(2)); // => 2
 
-console.log(composition(2)); // => 2
+// // example 2
+// const dec = x => x - 1;
+// const pow2 = x => x**2;
 
-// example 2
-const dec = x => x - 1;
-const pow2 = x => x**2;
+// console.log(compose(dec, pow2)(2)); // => 1
+// console.log(compose(pow2, dec)(2)); // => 3
 
-console.log(compose(dec, pow2)(2)); // => 1
-console.log(compose(pow2, dec)(2)); // => 3
+// task: You mast get 200 using "-", '+', and all numbers in the line. Don't replace digits
+// function generateExpressions(digits, target) {
+//   const results = [];
 
+//   function allExpressions(expression, index) {
+//     if (index === digits.length) {
+//       if (eval(expression) === target) {
+//         results.push(expression);
+//       }
+//       return;
+//     }
+//     const nextDigit = digits[index];
+//     const nextIndex = index + 1;
 
+//     allExpressions(expression + nextDigit, nextIndex);
+//     allExpressions(expression + "+" + nextDigit, nextIndex);
+//     allExpressions(expression + "-" + nextDigit, nextIndex);
+//   }
+
+//   allExpressions(digits[0], 1);
+//   return results;
+// }
