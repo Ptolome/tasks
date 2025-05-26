@@ -1,5 +1,3 @@
-/
-
 // task 1
 // const obj = {
 //   a: 3,
@@ -29,29 +27,21 @@
 // Написать функцию processProducts, которая возвращает массив из 3 строк,
 //  описывающих самые дорогие товары по убыванию цены.
 // Товары из этой выборки также не должны относиться к категории Stationery:
-// const products = [
-//   { name: "Laptop", category: "Electronics", price: 1500 },
-//   { name: "Pen", category: "Stationery", price: 2 },
-//   { name: "Smartphone", category: "Electronics", price: 800 },
-//   { name: "Notebook", category: "Stationery", price: 550 },
-//   { name: "TV", category: "Electronics", price: 400 },
-//   { name: "Bag", category: "Accessories", price: 30 },
-// ];
-// const processProducts = (products) => {
-//   const result = [];
-//   products.forEach((element) => {
-//     if (element.category !== "Stationery") {
-//       result.push(element);
-//     }
-//   });
-
-//   return result
-//     .sort((a, b) => {
-//       a.price - b.price;
-//     })
-//     .slice(0, 3);
-// };
-// console.log(processProducts(products)); // ["Laptop: $1500", "Smartphone: $800", "TV: $400"])
+const products = [
+  { name: "Laptop", category: "Electronics", price: 1500 },
+  { name: "Pen", category: "Stationery", price: 2 },
+  { name: "Smartphone", category: "Electronics", price: 800 },
+  { name: "Notebook", category: "Stationery", price: 550 },
+  { name: "TV", category: "Electronics", price: 400 },
+  { name: "Bag", category: "Accessories", price: 30 },
+];
+const processProducts = (products) => {
+  return products
+    .filter((item) => item.category !== "Stationary")
+    .sort((a, b) => b.price - a.price)
+    .slice(0, 3);
+};
+console.log(processProducts(products)); // ["Laptop: $1500", "Smartphone: $800", "TV: $400"])
 
 // task3 Реализуйте функцию customMap(array, callback), которая имитирует поведение метода массива .map().
 //  Функция должна принимать массив и колбэк функцию, которая применяется к каждому элементу массива,
@@ -84,23 +74,28 @@
 // Написать функцию get(obj, path), которая возвращает значение по указанному пути в объекте.
 //  Если путь не существует, функция должна возвращать undefined.
 
-// function get(obj, path) {
-//   const pathArray = path.split(".");
-//   let pathNow = obj;
-//   for (let key of pathArray) {
-//     pathNow = pathNow[key];
-//   }
-//   return pathNow;
-// }
-// const obj = {
-//   a: {
-//     b: {
-//       c: "d",
-//     },
-//   },
-// };
+function get(obj, path) {
+  const pathArray = path.split(".");
+  let pathNow = obj;
+  for (let key of pathArray) {
+    try {
+      pathNow = pathNow[key];
+    } catch {
+      return undefined;
+    }
+  }
+  return pathNow;
+}
+const obj = {
+  a: {
+    b: {
+      c: "d",
+    },
+  },
+};
 
-// console.log(get(obj, "a.b.c")); // d
+console.log(get(obj, "a.b.c")); // d
+console.log(get(obj, "ч.ч.ч")); // d
 
 // // task 6
 // // Написать функцию compose, реализующую композицию функций:
@@ -183,7 +178,6 @@
 //    console.log( await Promise.resolve(42));
 // }
 // result()
-
 
 // polifils promise.All
 // function PromiseAll(arrOfPromises) {
