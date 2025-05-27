@@ -65,18 +65,67 @@
 // const urls =['https://www.yandex.ru', 'https://www.google.com', 'https://www.ya.ru']
 // const getUrls= async (urls)=>{
 //     const promises= urls.map(url=>fetch(url))
-     
+
 //     return await Promise.all(promises)
 // }
 //  getUrls(urls).then(data=>{
 //     data.forEach(item=>console.log(item.status))
-//  }).catch(err=>console.log(err)); 
+//  }).catch(err=>console.log(err));
 
 // //7 Реализовать функцию timeoutPromise(promise, ms), которая отклоняет промис, если он не завершился за ms миллисекунд.
-const timeoutPromise=  (promise, ms)=>{
-   return new Promise((resolve,reject)=>{
-    
-   }
-    
-   )
-}
+// const timeoutPromise = (promise, ms) => {
+//   return new Promise((resolve, reject) => {
+//    setTimeout(() => {
+//       reject('Timeout Error');
+//     }, ms);
+
+//     promise
+//       .then((result) => {
+//          resolve(result);
+//         console.log(result);
+//       })
+//       .catch((error) => {
+//         console.error(error);
+//         reject(error);
+//       });
+//   });
+// };
+
+
+//   та же задача но с применением Promice.race
+// const timeoutPromise=(promis,ms)=>{
+//   return Promise.race([promis,new Promise((resolve)=>{setTimeout(()=>resolve('the time is over'),ms)})])
+// }
+
+// timeoutPromise(new Promise((resolve) => setTimeout(() => resolve(2), 3000)), 4000).then((result) => {
+//     console.log("Promise resolved:", result);
+//   })
+//   .catch((error) => {
+//     console.error("Promise rejected:", error);
+//   });
+
+// Уровень 3 — Продвинутый
+// Создать функцию, которая последовательно выполняет массив асинхронных функций (возвращающих промисы),
+//  передавая результат одной в следующую.
+// Реализовать функцию retry(fn, retries), которая повторяет вызов асинхронной функции fn заданное число раз в случае ошибки,
+//  и возвращает результат успешного вызова или ошибку после всех попыток.
+// Написать функцию, которая ограничивает количество одновременно выполняющихся промисов из массива (например, не более 3 одновременно).
+// Реализовать getState(promise), которая возвращает состояние промиса: "pending", "fulfilled" или "rejected".
+//  (Задача из вашего прошлого вопроса.)
+
+var a =5
+setTimeout(function timeOut(){
+   console.log(1,a);
+   a=10
+},0)
+console.log(2,a);
+var p = new Promise(function(resolve,reject){
+   console.log(3,a);
+   a=25
+   resolve()
+})
+p.then (function(){
+   a=15
+   console.log(4,a);
+})
+console.log(5,a);

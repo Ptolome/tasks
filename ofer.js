@@ -27,21 +27,21 @@
 // Написать функцию processProducts, которая возвращает массив из 3 строк,
 //  описывающих самые дорогие товары по убыванию цены.
 // Товары из этой выборки также не должны относиться к категории Stationery:
-const products = [
-  { name: "Laptop", category: "Electronics", price: 1500 },
-  { name: "Pen", category: "Stationery", price: 2 },
-  { name: "Smartphone", category: "Electronics", price: 800 },
-  { name: "Notebook", category: "Stationery", price: 550 },
-  { name: "TV", category: "Electronics", price: 400 },
-  { name: "Bag", category: "Accessories", price: 30 },
-];
-const processProducts = (products) => {
-  return products
-    .filter((item) => item.category !== "Stationary")
-    .sort((a, b) => b.price - a.price)
-    .slice(0, 3);
-};
-console.log(processProducts(products)); // ["Laptop: $1500", "Smartphone: $800", "TV: $400"])
+// const products = [
+//   { name: "Laptop", category: "Electronics", price: 1500 },
+//   { name: "Pen", category: "Stationery", price: 2 },
+//   { name: "Smartphone", category: "Electronics", price: 800 },
+//   { name: "Notebook", category: "Stationery", price: 550 },
+//   { name: "TV", category: "Electronics", price: 400 },
+//   { name: "Bag", category: "Accessories", price: 30 },
+// ];
+// const processProducts = (products) => {
+//   return products
+//     .filter((item) => item.category !== "Stationary")
+//     .sort((a, b) => b.price - a.price)
+//     .slice(0, 3);
+// };
+// console.log(processProducts(products)); // ["Laptop: $1500", "Smartphone: $800", "TV: $400"])
 
 // task3 Реализуйте функцию customMap(array, callback), которая имитирует поведение метода массива .map().
 //  Функция должна принимать массив и колбэк функцию, которая применяется к каждому элементу массива,
@@ -74,28 +74,28 @@ console.log(processProducts(products)); // ["Laptop: $1500", "Smartphone: $800",
 // Написать функцию get(obj, path), которая возвращает значение по указанному пути в объекте.
 //  Если путь не существует, функция должна возвращать undefined.
 
-function get(obj, path) {
-  const pathArray = path.split(".");
-  let pathNow = obj;
-  for (let key of pathArray) {
-    try {
-      pathNow = pathNow[key];
-    } catch {
-      return undefined;
-    }
-  }
-  return pathNow;
-}
-const obj = {
-  a: {
-    b: {
-      c: "d",
-    },
-  },
-};
+// function get(obj, path) {
+//   const pathArray = path.split(".");
+//   let pathNow = obj;
+//   for (let key of pathArray) {
+//     try {
+//       pathNow = pathNow[key];
+//     } catch {
+//       return undefined;
+//     }
+//   }
+//   return pathNow;
+// }
+// const obj = {
+//   a: {
+//     b: {
+//       c: "d",
+//     },
+//   },
+// };
 
-console.log(get(obj, "a.b.c")); // d
-console.log(get(obj, "ч.ч.ч")); // d
+// console.log(get(obj, "a.b.c")); // d
+// console.log(get(obj, "ч.ч.ч")); // d
 
 // // task 6
 // // Написать функцию compose, реализующую композицию функций:
@@ -208,7 +208,7 @@ console.log(get(obj, "ч.ч.ч")); // d
 //   for (let i = 0; i < arrayOfPromises.length; i++) {
 //     console.log(i + 1);
 //     try {
-//       const item = await Promise.resolve(arrayOfPromises[i]);
+//       const item = await arrayOfPromises[i];
 //       result[i] = item;
 //     } catch (e) {
 //       throw e;
@@ -231,23 +231,23 @@ console.log(get(obj, "ч.ч.ч")); // d
 //   return result
 // }
 
-// const promiseAllSettled = function (arrayOfPromises) {
-//   return new Promise((resolve, reject) => {
-//     const result = [];
-//     let count = 0;
-//     for (let i of arrayOfPromises) {
-//       Promise.resolve(i)
-//         .then((data) => result.push({ status: "fulfilled", value: data }))
-//         .catch((e) => result.push({ status: "rejected", reason: e }))
-//         .finally(() => {
-//           count += 1;
-//           if (count === arrayOfPromises.length) {
-//             resolve(result);
-//           }
-//         });
-//     }
-//   });
-// };
+const promiseAllSettled = function (arrayOfPromises) {
+  return new Promise((resolve, reject) => {
+    const result = [];
+    let count = 0;
+    for (let i of arrayOfPromises) {
+      Promise.resolve(i)
+        .then((data) => result[count]={ status: "fulfilled", value: data })
+        .catch((e) => result[count]={ status: "rejected", reason: e })
+        .finally(() => {
+          count += 1;
+          if (count === arrayOfPromises.length) {
+            resolve(result);
+          }
+        });
+    }
+  });
+};
 // const promiseRace=(arrayOfPromises)=>{
 //   return new Promise((resolve, reject)=>{
 //     for (let item of arrayOfPromises){
@@ -258,9 +258,9 @@ console.log(get(obj, "ч.ч.ч")); // d
 //     }
 //   })
 // }
-// promiseRace([
-//   new Promise((resolve) => setTimeout(() => resolve(1), 10000)), // 1
-//   new Promise((resolve) => setTimeout(() => resolve(2), 20000)), // 2
-//   new Promise((resolve, reject) => setTimeout(() => reject(3), 3000)), // 3
-//   new Promise((resolve) => setTimeout(() => resolve(4), 4000)), // 3
-// ]).then((data) => console.log(data));
+promiseAllSettled([
+  new Promise((resolve) => setTimeout(() => resolve(1), 1000)), // 1
+  new Promise((resolve) => setTimeout(() => resolve(2), 2000)), // 2
+  new Promise((resolve, reject) => setTimeout(() => reject(3), 3000)), // 3
+  new Promise((resolve) => setTimeout(() => resolve(4), 4000)), // 3
+]).then((data) => console.log(data));
