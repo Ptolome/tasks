@@ -1,89 +1,3 @@
-// polifils promise.All
-// function PromiseAll(arrOfPromises) {
-//   return new Promise((resolve, rejefct) => {
-//     const resultArr = [];
-//     let counterOfresolve = arrOfPromises.length;
-//     if (!counterOfresolve) {
-//       resolve([])
-//     }
-//     arrOfPromises.forEach((element, index) => {
-//       Promise.resolve(element)
-//         .then((data) => {
-//           resultArr[index] = data;
-//           counterOfresolve -= 1;
-//           if (!counterOfresolve) {
-//             resolve( resultArr);
-//           }
-//         })
-//         .catch((err) => rejefct(err));
-//     });
-
-//   });
-// }
-
-// async function PromiseAll(arrayOfPromises) {
-//   const result = [];
-
-//   for (let i = 0; i < arrayOfPromises.length; i++) {
-//     console.log(i + 1);
-//     try {
-//       const item = await Promise.resolve(arrayOfPromises[i]);
-//       result[i] = item;
-//     } catch (e) {
-//       throw e;
-//     }
-//   }
-//   return result;
-// }
-// async function promiseAllSettled(arrayOfPromise) {
-//   const result = [];
-//   for (let i = 0; i < arrayOfPromise.length; i++) {
-
-//       try {
-//          data = await Promise.resolve(arrayOfPromise[i]);
-//         result.push({ status: "fulfilled", value: data });
-//       } catch (e) {
-//         result.push({ status: "rejected", reason: e });
-//       }
-
-//   }
-//   return result
-// }
-
-// const promiseAllSettled = function (arrayOfPromises) {
-//   return new Promise((resolve, reject) => {
-//     const result = [];
-//     let count = 0;
-//     for (let i of arrayOfPromises) {
-//       Promise.resolve(i)
-//         .then((data) => result.push({ status: "fulfilled", value: data }))
-//         .catch((e) => result.push({ status: "rejected", reason: e }))
-//         .finally(() => {
-//           count += 1;
-//           if (count === arrayOfPromises.length) {
-//             resolve(result);
-//           }
-//         });
-//     }
-//   });
-// };
-// const promiseRace=(arrayOfPromises)=>{
-//   return new Promise((resolve, reject)=>{
-//     for (let item of arrayOfPromises){
-//       Promise.resolve(item)
-//       .then((data)=>resolve(data))
-//       .catch((err)=>reject(err))
-
-//     }
-//   })
-// }
-// promiseRace([
-//   new Promise((resolve) => setTimeout(() => resolve(1), 10000)), // 1
-//   new Promise((resolve) => setTimeout(() => resolve(2), 20000)), // 2
-//   new Promise((resolve, reject) => setTimeout(() => reject(3), 3000)), // 3
-//   new Promise((resolve) => setTimeout(() => resolve(4), 4000)), // 3
-// ]).then((data) => console.log(data));
-
 // task 1
 // const obj = {
 //   a: 3,
@@ -122,17 +36,9 @@
 //   { name: "Bag", category: "Accessories", price: 30 },
 // ];
 // const processProducts = (products) => {
-//   const result = [];
-//   products.forEach((element) => {
-//     if (element.category !== "Stationery") {
-//       result.push(element);
-//     }
-//   });
-
-//   return result
-//     .sort((a, b) => {
-//       a.price - b.price;
-//     })
+//   return products
+//     .filter((item) => item.category !== "Stationary")
+//     .sort((a, b) => b.price - a.price)
 //     .slice(0, 3);
 // };
 // console.log(processProducts(products)); // ["Laptop: $1500", "Smartphone: $800", "TV: $400"])
@@ -172,7 +78,11 @@
 //   const pathArray = path.split(".");
 //   let pathNow = obj;
 //   for (let key of pathArray) {
-//     pathNow = pathNow[key];
+//     try {
+//       pathNow = pathNow[key];
+//     } catch {
+//       return undefined;
+//     }
 //   }
 //   return pathNow;
 // }
@@ -185,6 +95,7 @@
 // };
 
 // console.log(get(obj, "a.b.c")); // d
+// console.log(get(obj, "ч.ч.ч")); // d
 
 // // task 6
 // // Написать функцию compose, реализующую композицию функций:
@@ -267,3 +178,89 @@
 //    console.log( await Promise.resolve(42));
 // }
 // result()
+
+// polifils promise.All
+// function PromiseAll(arrOfPromises) {
+//   return new Promise((resolve, rejefct) => {
+//     const resultArr = [];
+//     let counterOfresolve = arrOfPromises.length;
+//     if (!counterOfresolve) {
+//       resolve([])
+//     }
+//     arrOfPromises.forEach((element, index) => {
+//       Promise.resolve(element)
+//         .then((data) => {
+//           resultArr[index] = data;
+//           counterOfresolve -= 1;
+//           if (!counterOfresolve) {
+//             resolve( resultArr);
+//           }
+//         })
+//         .catch((err) => rejefct(err));
+//     });
+
+//   });
+// }
+
+// async function PromiseAll(arrayOfPromises) {
+//   const result = [];
+
+//   for (let i = 0; i < arrayOfPromises.length; i++) {
+//     console.log(i + 1);
+//     try {
+//       const item = await arrayOfPromises[i];
+//       result[i] = item;
+//     } catch (e) {
+//       throw e;
+//     }
+//   }
+//   return result;
+// }
+// async function promiseAllSettled(arrayOfPromise) {
+//   const result = [];
+//   for (let i = 0; i < arrayOfPromise.length; i++) {
+
+//       try {
+//          data = await Promise.resolve(arrayOfPromise[i]);
+//         result.push({ status: "fulfilled", value: data });
+//       } catch (e) {
+//         result.push({ status: "rejected", reason: e });
+//       }
+
+//   }
+//   return result
+// }
+
+const promiseAllSettled = function (arrayOfPromises) {
+  return new Promise((resolve, reject) => {
+    const result = [];
+    let count = 0;
+    for (let i of arrayOfPromises) {
+      Promise.resolve(i)
+        .then((data) => result[count]={ status: "fulfilled", value: data })
+        .catch((e) => result[count]={ status: "rejected", reason: e })
+        .finally(() => {
+          count += 1;
+          if (count === arrayOfPromises.length) {
+            resolve(result);
+          }
+        });
+    }
+  });
+};
+// const promiseRace=(arrayOfPromises)=>{
+//   return new Promise((resolve, reject)=>{
+//     for (let item of arrayOfPromises){
+//       Promise.resolve(item)
+//       .then((data)=>resolve(data))
+//       .catch((err)=>reject(err))
+
+//     }
+//   })
+// }
+promiseAllSettled([
+  new Promise((resolve) => setTimeout(() => resolve(1), 1000)), // 1
+  new Promise((resolve) => setTimeout(() => resolve(2), 2000)), // 2
+  new Promise((resolve, reject) => setTimeout(() => reject(3), 3000)), // 3
+  new Promise((resolve) => setTimeout(() => resolve(4), 4000)), // 3
+]).then((data) => console.log(data));
